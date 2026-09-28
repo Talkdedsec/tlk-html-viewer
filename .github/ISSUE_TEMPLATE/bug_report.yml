@@ -1,0 +1,34 @@
+name: Bug report
+description: Report a reproducible problem with TLK HTML Viewer.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include passwords, tokens, personal data or private HTML. For security issues, use SECURITY.md.
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: Where does this happen?
+      options: [Online website, Offline HTML release, Local development]
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, operating system and app version
+      placeholder: Firefox 146, Windows 11, v1.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include a small, non-sensitive code sample if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result and actual result
+    validations:
+      required: true

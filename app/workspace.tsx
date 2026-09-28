@@ -1,7 +1,12 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Code2,
   Play,
@@ -40,10 +45,7 @@ import {
   MAX_FILE_SIZE,
   type Project,
 } from "../lib/document";
-const Editor = dynamic(() => import("./editor"), {
-  ssr: false,
-  loading: () => <div className="editor-loading">Editör hazırlanıyor…</div>,
-});
+const Editor = lazy(() => import("./editor"));
 type Layout = "split" | "stack" | "code" | "preview";
 type Theme = "midnight" | "graphite" | "light";
 type Log = {
@@ -332,7 +334,11 @@ export default function Workspace() {
         Editöre geç
       </a>
       <header className="topbar">
-        <Link className="brand" href="/" aria-label="TLK HTML Viewer ana sayfa">
+        <button
+          className="brand"
+          onClick={() => window.scrollTo({ top: 0 })}
+          aria-label="TLK HTML Viewer, başa dön"
+        >
           <span className="brand-icon">
             <Code2 size={21} />
           </span>
@@ -340,7 +346,7 @@ export default function Workspace() {
             TLK <b>Viewer</b>
           </span>
           <span className="beta">STUDIO</span>
-        </Link>
+        </button>
         <div className="top-center">
           <span className="status-dot" /> Kendi alanın. Sonsuz olasılık.
         </div>
@@ -566,21 +572,28 @@ export default function Workspace() {
                 role="tabpanel"
                 aria-labelledby={`tab-${tab}`}
               >
-                {(["html", "css", "js"] as const).map((language) => (
-                  <div key={language} hidden={language !== tab}>
-                    <Editor
-                      value={project[language]}
-                      language={language}
-                      onChange={(value) => {
-                        setSaved("Kaydediliyor…");
-                        setProject((p) => ({ ...p, [language]: value }));
-                      }}
-                      light={theme === "light"}
-                      fontSize={fontSize}
-                      wrap={wrap}
-                    />
-                  </div>
-                ))}
+                <Suspense
+                  fallback={
+                    <div className="editor-loading">Editör hazırlanıyor…</div>
+                  }
+                >
+                  {ready &&
+                    (["html", "css", "js"] as const).map((language) => (
+                      <div key={language} hidden={language !== tab}>
+                        <Editor
+                          value={project[language]}
+                          language={language}
+                          onChange={(value) => {
+                            setSaved("Kaydediliyor…");
+                            setProject((p) => ({ ...p, [language]: value }));
+                          }}
+                          light={theme === "light"}
+                          fontSize={fontSize}
+                          wrap={wrap}
+                        />
+                      </div>
+                    ))}
+                </Suspense>
               </div>
               <div className="editor-bottom">
                 <span>

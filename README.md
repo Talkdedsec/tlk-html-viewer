@@ -1,32 +1,83 @@
-﻿# TLK HTML Viewer
+﻿<div align="center">
 
-![TLK HTML Viewer social card](public/og.png)
+# TLK HTML Viewer
 
-**Fikirden ekrana.** A customizable HTML, CSS and JavaScript workspace with a Turkish interface, a dark default theme and instant preview.
+**From an idea to a live canvas. No installation. No account.**
 
-## Features
+[**Open the app ↗**](https://talkdedsec.github.io/tlk-html-viewer/) · [Download offline](https://github.com/Talkdedsec/tlk-html-viewer/releases/latest) · [Usage guide](docs/USAGE.md) · [Türkçe](README.tr.md)
 
-- CodeMirror editor: syntax highlighting, completion, folding, search/replace and undo/redo.
-- Separate HTML, CSS and JavaScript panels; full HTML documents also work.
-- Live preview with a 650 ms debounce, or manual execution.
-- Side-by-side, stacked, code-only and preview-only layouts; mobile editor/preview tabs.
-- Flexible desktop, 768 px tablet and 375 px phone viewports; fullscreen preview.
-- Midnight, graphite and light themes; adjustable font size and line wrapping.
-- Console output, warnings, errors and unhandled promise rejections; last 200 messages.
-- Open or drop HTML and project JSON files, up to 2 MB.
-- Download a combined standalone HTML file or an editable JSON project.
-- Automatic local browser saving, three starter templates and keyboard shortcuts.
+[![Quality](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/ci.yml)
+[![Website](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/pages.yml/badge.svg)](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/pages.yml)
+[![MIT](https://img.shields.io/badge/license-MIT-b8a2f7)](LICENSE)
+
+![TLK HTML Viewer social artwork](public/og.png)
+
+</div>
+
+A browser workspace for HTML, CSS and JavaScript, with a dark default theme, a full code editor and instant preview. Open an existing HTML file or start from a template. Your code stays in your browser; the app does not upload it. The current interface is Turkish.
+
+## Start in 10 seconds
+
+1. [Open TLK HTML Viewer](https://talkdedsec.github.io/tlk-html-viewer/).
+2. Paste code, or choose **Dosya aç** to open an HTML file.
+3. See the preview, then choose **HTML indir** to download the result.
+
+No GitHub login, terminal, Node.js or package installation is needed to use the app.
+
+## The workspace
+
+| Area        | Capabilities                                                           |
+| ----------- | ---------------------------------------------------------------------- |
+| Editor      | Syntax highlighting, completion, search/replace, folding and undo/redo |
+| Preview     | Automatic or manual runs; console output, warnings and errors          |
+| Layout      | Split, stacked, code-only, preview-only and mobile tabs                |
+| Appearance  | Midnight, graphite and light themes; font size and line wrapping       |
+| Devices     | Flexible desktop, 768 px tablet, 375 px phone and fullscreen           |
+| Files       | HTML/project JSON import, drag and drop, HTML export, JSON backups     |
+| Privacy     | Local browser saving; no app account or source-code upload             |
+| Portability | The same workspace bundled into one offline HTML file                  |
+
+## Online and offline
+
+**Online:** [Open the public website](https://talkdedsec.github.io/tlk-html-viewer/).
+
+**Offline:** Download `tlk-html-viewer.html` from the [latest release](https://github.com/Talkdedsec/tlk-html-viewer/releases/latest), then double-click it. All application code and editor dependencies are inside that file. SHA-256 checksums are provided. External resources referenced by your own HTML still require a network connection.
+
+The online app is served by GitHub Pages. Local file selection uses the browser File API; it is not an upload endpoint. Web hosting may retain ordinary access logs.
+
+## Save your work
+
+**HTML indir** combines all panels into a standalone HTML document without the preview console bridge. **Proje kaydet** downloads JSON that preserves all three panels for later editing. Reopen that JSON through **Dosya aç**.
+
+Projects also autosave in localStorage. Storage may be denied, cleared or full; download a project backup for work you want to keep. Local storage is not encrypted.
+
+| Shortcut         | Action                       |
+| ---------------- | ---------------------------- |
+| Ctrl/Cmd + Enter | Run preview                  |
+| Ctrl/Cmd + S     | Download HTML                |
+| Ctrl/Cmd + F     | Search/replace in the editor |
+| Ctrl/Cmd + Z     | Undo in the focused editor   |
+| Tab              | Indent code                  |
+| Esc              | Close a dialog               |
+
+## Boundaries
+
+The import limit is 2 MB. Local companion files, npm imports and backend routes are not resolved automatically. Device buttons change viewport width, not the operating system or browser engine.
+
+The preview iframe grants `allow-scripts` only when enabled, never `allow-same-origin`. Forms, popups and top navigation are restricted. Sandboxing does not prevent external requests or infinite loops. Treat imported code as executable code, and only run code you trust. Clipboard and storage behavior on `file://` varies by browser.
+
+[Usage and troubleshooting](docs/USAGE.md) · [Security model](SECURITY.md) · [Architecture](docs/ARCHITECTURE.md) · [Sample HTML](examples/hello.html)
 
 ## Development
 
-Requires Node.js 24 and npm.
+Only contributors need Node.js 24:
 
 ```sh
+git clone https://github.com/Talkdedsec/tlk-html-viewer.git
+cd tlk-html-viewer
 npm ci
 npm run dev
 ```
-
-Open the Local URL printed by the server. The project uses React, TypeScript, CodeMirror 6, Lucide, vinext and Vite. The Sites Vite plugin produces Cloudflare Worker-compatible output.
 
 ```sh
 npm run typecheck
@@ -34,49 +85,16 @@ npm run lint
 npm test
 npm run build
 npm run test:production
+npm run build:standalone
+npm run test:standalone
 ```
 
-CI runs the same checks. The production test starts a local Worker runtime and checks the rendered page. Automated coverage currently covers document composition, project validation and server rendering; it does not replace interactive browser testing.
+The web and offline distributions share `app/workspace.tsx`. CodeMirror 6 provides the editor; React and TypeScript power the interface. The standalone build uses esbuild. The optional Sites build preserves the vinext/Vite/Cloudflare pipeline.
 
-## Shortcuts
+CI verifies document composition, project validation, standalone integrity and production server rendering. It is not a claim of complete cross-browser or accessibility testing.
 
-| Shortcut         | Action                               |
-| ---------------- | ------------------------------------ |
-| Ctrl/Cmd + Enter | Run preview                          |
-| Ctrl/Cmd + S     | Download HTML                        |
-| Ctrl/Cmd + F     | Search/replace in the focused editor |
-| Ctrl/Cmd + Z     | Undo in the focused editor           |
-| Tab              | Indent code                          |
-| Esc              | Close a dialog                       |
+## Contribute
 
-## Project files
+[Report a bug or suggest a feature](https://github.com/Talkdedsec/tlk-html-viewer/issues/new/choose). Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Releases are documented in [CHANGELOG.md](CHANGELOG.md).
 
-Use **Proje kaydet** to download a JSON file that preserves all three panels. Use **Dosya aç** or drag it into the workspace to restore it. HTML export combines the panels into a standalone document and omits the preview console bridge. Importing an HTML file places the complete document in the HTML panel.
-
-```json
-{
-  "version": 1,
-  "name": "my-project",
-  "project": {
-    "html": "<h1>Hello</h1>",
-    "css": "h1 { color: rebeccapurple; }",
-    "js": "console.log('Ready');"
-  }
-}
-```
-
-## Privacy and limitations
-
-Project code stays in this browser's localStorage; the editor does not upload it. Export a JSON backup to move between devices or protect against cleared browser data. Storage can be unavailable or full, in which case the workspace displays a failure status and editing remains available.
-
-The preview uses an iframe with `sandbox="allow-scripts"`, never `allow-same-origin`. JavaScript can be disabled in settings. Parent-page access, popups, form submission and top-level navigation are not granted. Imported content can still load external resources and a long-running script can freeze a tab. This is a creative tool, not a malware sandbox. See [SECURITY.md](SECURITY.md).
-
-Relative images, local companion files, backend routes, package imports and multi-file projects are not automatically resolved. Hosted HTTPS or localhost is required for modern clipboard and secure-context features. The app is not an offline PWA. Preview console capture may be blocked by an imported document's own CSP. Exported HTML runs independently, outside the app's sandbox.
-
-## Hosting
-
-`npm run build` emits `dist/server/index.js` and `dist/client`. `.hosting/hosting.json` identifies the Sites project; it contains no credential. Sites deployment access and the GitHub repository's visibility are independent. The repository is public; the initial Sites preview is owner-private.
-
-## Contributing and license
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). MIT © 2026 Talkdedsec.
+MIT © 2026 Talkdedsec.

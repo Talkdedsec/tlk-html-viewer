@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Merhaba — TLK Viewer örneği</title>
+    <style>
+      body { font-family: system-ui; padding: 48px; background: #18151f; color: #eee8ff; }
+      button { padding: 12px 20px; background: #baa1fa; color: #231a35; border: 0; border-radius: 8px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <h1>Merhaba, dünya.</h1>
+    <p>Bu dosyayı TLK Viewer’a sürükle.</p>
+    <button id="count">Tıklama: 0</button>
+    <script>
+      let count = 0;
+      document.querySelector('#count').onclick = event => {
+        event.target.textContent = `Tıklama: ${++count}`;
+        console.log({ count });
+      };
+    </script>
+  </body>
+</html>
