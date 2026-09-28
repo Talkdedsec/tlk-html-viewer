@@ -16,6 +16,8 @@ Bir dosyanın yanında bulunan resim veya CSS dosyaları otomatik alınmaz. Taş
 
 ## Görünümü kendine göre ayarla
 
+Üst çubuktaki **TR / EN** seçicisi arayüz dilini değiştirir. Düğmeler, ayarlar, uyarılar, kısayollar ve editörün arama penceresi birlikte değişir. Projedeki kaynak kodu, açık dosya ve geri alma geçmişi korunur; dil seçimi bu tarayıcıda hatırlanır.
+
 - Ayarlar: Gece, Grafit veya Gün ışığı teması; yazı boyutu; satır kaydırma; önizlemede JavaScript.
 - Düzen düğmeleri: yan yana, alt alta, yalnız kod veya yalnız önizleme.
 - Cihaz düğmeleri: esnek masaüstü, 768 px tablet, 375 px telefon.

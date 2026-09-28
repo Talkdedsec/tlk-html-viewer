@@ -1,5 +1,12 @@
 "use client";
 import {
+  translate as translateMessage,
+  normalizeLocale,
+  formatCount,
+  type Locale,
+  type MessageKey,
+} from "../lib/i18n";
+import {
   lazy,
   Suspense,
   useCallback,
@@ -51,13 +58,13 @@ type Theme = "midnight" | "graphite" | "light";
 type Log = {
   level: string;
   text: string;
-  time: string;
+  time: number;
 };
 const STORE = "tlk-html-viewer.project.v1";
 const PREFS = "tlk-html-viewer.preferences.v1";
 const templates: {
-  name: string;
-  caption: string;
+  name: MessageKey;
+  caption: MessageKey;
   project: Project;
   color: string;
 }[] = [
@@ -100,7 +107,7 @@ function IconButton({
   label,
   onClick,
   icon,
-  active = false,
+  active,
 }: {
   label: string;
   onClick: () => void;
@@ -120,6 +127,11 @@ function IconButton({
   );
 }
 export default function Workspace() {
+  const [locale, setLocale] = useState<Locale>("tr");
+  const translate = useCallback(
+    (key: MessageKey) => translateMessage(locale, key),
+    [locale],
+  );
   const [project, setProject] = useState<Project>(starter);
   const [tab, setTab] = useState<keyof Project>("html");
   const [layout, setLayout] = useState<Layout>("split");
@@ -130,11 +142,11 @@ export default function Workspace() {
   const [wrap, setWrap] = useState(true);
   const [fontSize, setFontSize] = useState(13);
   const [ready, setReady] = useState(false);
-  const [saved, setSaved] = useState("Hazırlanıyor");
+  const [saved, setSaved] = useState<MessageKey>("Hazırlanıyor");
   const [name, setName] = useState("untitled");
   const [logs, setLogs] = useState<Log[]>([]);
   const [consoleOpen, setConsoleOpen] = useState(false);
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useState<MessageKey | "">("");
   const [rendered, setRendered] = useState({ html: "", token: "", key: 0 });
   const [mobile, setMobile] = useState<"code" | "preview">("code");
   const frame = useRef<HTMLIFrameElement>(null);
@@ -148,7 +160,7 @@ export default function Workspace() {
   useEffect(() => {
     projectRef.current = project;
   }, [project]);
-  const notify = useCallback((text: string) => setNotice(text), []);
+  const notify = useCallback((text: MessageKey) => setNotice(text), []);
   useEffect(() => {
     if (!notice) return;
     const timer = setTimeout(() => setNotice(""), 3500);
@@ -179,6 +191,7 @@ export default function Workspace() {
           }
         }
         const prefs = JSON.parse(localStorage.getItem(PREFS) || "{}");
+        setLocale(normalizeLocale(prefs.locale));
         if (["midnight", "graphite", "light"].includes(prefs.theme))
           setTheme(prefs.theme);
         if ([11, 12, 13, 14, 16, 18].includes(prefs.fontSize))
@@ -209,11 +222,21 @@ export default function Workspace() {
   useEffect(() => {
     if (!ready) return;
     try {
-      localStorage.setItem(PREFS, JSON.stringify({ theme, fontSize, wrap }));
+      localStorage.setItem(
+        PREFS,
+        JSON.stringify({ theme, fontSize, wrap, locale }),
+      );
     } catch {
       /* Editing remains available. */
     }
-  }, [theme, fontSize, wrap, ready]);
+  }, [theme, fontSize, wrap, locale, ready]);
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.title =
+      locale === "en"
+        ? "TLK HTML Viewer — From idea to canvas"
+        : "TLK HTML Viewer — Fikirden ekrana";
+  }, [locale]);
   useEffect(() => {
     if (!ready || !auto) return;
     const timer = setTimeout(run, 650);
@@ -238,7 +261,7 @@ export default function Workspace() {
         {
           level: e.data.level,
           text: e.data.text.slice(0, 4000),
-          time: new Date().toLocaleTimeString("tr-TR"),
+          time: Date.now(),
         },
       ]);
     };
@@ -285,7 +308,9 @@ export default function Workspace() {
       return notify("Bir .html, .htm veya proje .json dosyası seç.");
     if (
       !confirm(
-        "Açılan dosya mevcut çalışmanın yerini alacak. Devam edilsin mi?",
+        translate(
+          "Açılan dosya mevcut çalışmanın yerini alacak. Devam edilsin mi?",
+        ),
       )
     )
       return;
@@ -295,7 +320,7 @@ export default function Workspace() {
       const next = /\.json$/i.test(file.name)
         ? parseProject(JSON.parse(text).project)
         : { html: text, css: "", js: "" };
-      if (!next) throw new Error("Geçersiz proje dosyası.");
+      if (!next) throw new Error(translate("Geçersiz proje dosyası."));
       setProject(next);
       projectRef.current = next;
       setName(file.name.replace(/\.(html?|json)$/i, ""));
@@ -309,7 +334,11 @@ export default function Workspace() {
     }
   }
   function loadTemplate(index: number) {
-    if (!confirm("Şablon mevcut çalışmanın yerini alacak. Devam edilsin mi?"))
+    if (
+      !confirm(
+        translate("Şablon mevcut çalışmanın yerini alacak. Devam edilsin mi?"),
+      )
+    )
       return;
     const next = { ...templates[index].project };
     setProject(next);
@@ -331,13 +360,14 @@ export default function Workspace() {
   return (
     <div className={`studio theme-${theme}`}>
       <a className="skip-link" href="#code-panel">
-        Editöre geç
+        {" "}
+        {translate("Editöre geç")}{" "}
       </a>
       <header className="topbar">
         <button
           className="brand"
           onClick={() => window.scrollTo({ top: 0 })}
-          aria-label="TLK HTML Viewer, başa dön"
+          aria-label={translate("TLK HTML Viewer, başa dön")}
         >
           <span className="brand-icon">
             <Code2 size={21} />
@@ -348,35 +378,62 @@ export default function Workspace() {
           <span className="beta">STUDIO</span>
         </button>
         <div className="top-center">
-          <span className="status-dot" /> Kendi alanın. Sonsuz olasılık.
+          <span className="status-dot" />{" "}
+          {translate("Kendi alanın. Sonsuz olasılık.")}{" "}
         </div>
         <div className="top-actions">
+          <div
+            className="language-switch"
+            role="group"
+            aria-label={translate("Arayüz dili")}
+          >
+            <button
+              lang="tr"
+              aria-label="Türkçe"
+              aria-pressed={locale === "tr"}
+              onClick={() => setLocale("tr")}
+            >
+              TR
+            </button>
+            <button
+              lang="en"
+              aria-label="English"
+              aria-pressed={locale === "en"}
+              onClick={() => setLocale("en")}
+            >
+              EN
+            </button>
+          </div>
           <a
             className="icon-button github"
             href="https://github.com/Talkdedsec/tlk-html-viewer"
             target="_blank"
             rel="noreferrer"
-            aria-label="GitHub deposu"
+            aria-label={translate("GitHub deposu")}
           >
             <CodeXml size={18} />
           </a>
           {
             <IconButton
-              label={"Klavye kısayolları"}
+              label={translate("Klavye kısayolları")}
               onClick={() => help.current?.showModal()}
               icon={<Keyboard size={18} />}
             />
           }
           {
             <IconButton
-              label={"Çalışma alanı ayarları"}
+              label={translate("Çalışma alanı ayarları")}
               onClick={() => settings.current?.showModal()}
               icon={<Settings2 size={18} />}
             />
           }
-          <button className="primary small" onClick={exportHtml}>
+          <button
+            className="primary small"
+            onClick={exportHtml}
+            aria-label={translate("HTML indir")}
+          >
             <Download size={15} />
-            <span>HTML indir</span>
+            <span>{translate("HTML indir")}</span>
           </button>
         </div>
       </header>
@@ -384,30 +441,32 @@ export default function Workspace() {
         <section className="intro">
           <div>
             <div className="eyebrow">
-              <span /> TARAYICIDAKİ YARATICI ALANIN
+              <span /> {translate("TARAYICIDAKİ YARATICI ALANIN")}{" "}
             </div>
             <h1>
-              Fikirden <span>ekrana.</span>
+              {" "}
+              {translate("Fikirden")} <span>{translate("ekrana.")}</span>
             </h1>
-            <p>Yaz, dene, keşfet. Kodun anında hayat bulsun.</p>
+            <p>{translate("Yaz, dene, keşfet. Kodun anında hayat bulsun.")}</p>
           </div>
           <button
             className="template-callout"
+            aria-label={translate("Bir fikirle başla")}
             onClick={() => library.current?.showModal()}
           >
             <span className="template-icon">
               <Sparkles size={19} />
             </span>
             <span>
-              <b>Bir fikirle başla</b>
-              <small>Hazır tuvalleri keşfet</small>
+              <b>{translate("Bir fikirle başla")}</b>
+              <small>{translate("Hazır tuvalleri keşfet")}</small>
             </span>
             <span className="arrow">↗</span>
           </button>
         </section>
         <section
           className="workbench"
-          aria-label="HTML çalışma alanı"
+          aria-label={translate("HTML çalışma alanı")}
           onDragOver={(e) => {
             if (e.dataTransfer.types.includes("Files")) e.preventDefault();
           }}
@@ -420,28 +479,33 @@ export default function Workspace() {
             <div className="project-title">
               <FileCode2 size={17} />
               <input
-                aria-label="Proje adı"
+                aria-label={translate("Proje adı")}
                 value={name}
                 maxLength={80}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setSaved("Kaydediliyor…");
+                  setName(e.target.value);
+                }}
               />
               <span className="extension">.html</span>
               <span className="toolbar-divider" />
               <span className="save-status">
                 <Check size={12} />
-                {saved}
+                {translate(saved)}
               </span>
             </div>
             <div className="project-actions">
               <button
                 className="text-button"
+                aria-label={translate("Dosya aç")}
                 onClick={() => fileInput.current?.click()}
               >
                 <Upload size={14} />
-                <span>Dosya aç</span>
+                <span>{translate("Dosya aç")}</span>
               </button>
               <button
                 className="text-button"
+                aria-label={translate("Proje kaydet")}
                 onClick={() => {
                   download(
                     JSON.stringify({ version: 1, name, project }, null, 2),
@@ -452,13 +516,16 @@ export default function Workspace() {
                 }}
               >
                 <Save size={14} />
-                <span>Proje kaydet</span>
+                <span>{translate("Proje kaydet")}</span>
               </button>
               <span className="toolbar-divider" />
-              <div className="layout-switch" aria-label="Panel düzeni">
+              <div
+                className="layout-switch"
+                aria-label={translate("Panel düzeni")}
+              >
                 {
                   <IconButton
-                    label={"Yan yana"}
+                    label={translate("Yan yana")}
                     onClick={() => setLayout("split")}
                     icon={<Columns2 size={16} />}
                     active={layout === "split"}
@@ -466,7 +533,7 @@ export default function Workspace() {
                 }
                 {
                   <IconButton
-                    label={"Alt alta"}
+                    label={translate("Alt alta")}
                     onClick={() => setLayout("stack")}
                     icon={<Rows2 size={16} />}
                     active={layout === "stack"}
@@ -474,7 +541,7 @@ export default function Workspace() {
                 }
                 {
                   <IconButton
-                    label={"Yalnızca kod"}
+                    label={translate("Yalnızca kod")}
                     onClick={() => setLayout("code")}
                     icon={<PanelLeft size={16} />}
                     active={layout === "code"}
@@ -482,7 +549,7 @@ export default function Workspace() {
                 }
                 {
                   <IconButton
-                    label={"Yalnızca önizleme"}
+                    label={translate("Yalnızca önizleme")}
                     onClick={() => setLayout("preview")}
                     icon={<Eye size={16} />}
                     active={layout === "preview"}
@@ -496,23 +563,27 @@ export default function Workspace() {
               className={mobile === "code" ? "selected" : ""}
               onClick={() => setMobile("code")}
             >
-              <Code2 size={15} /> Kod
+              <Code2 size={15} /> {translate("Kod")}{" "}
             </button>
             <button
               className={mobile === "preview" ? "selected" : ""}
               onClick={() => setMobile("preview")}
             >
-              <Eye size={15} /> Önizleme
+              <Eye size={15} /> {translate("Önizleme")}{" "}
             </button>
           </div>
           <div className={`panels layout-${layout} mobile-${mobile}`}>
             <section
               className="code-panel"
               id="code-panel"
-              aria-label="Kod editörü"
+              aria-label={translate("Kod editörü")}
             >
               <div className="panel-toolbar">
-                <div className="file-tabs" role="tablist" aria-label="Kod dili">
+                <div
+                  className="file-tabs"
+                  role="tablist"
+                  aria-label={translate("Kod dili")}
+                >
                   {(["html", "css", "js"] as const).map((language, i) => (
                     <button
                       key={language}
@@ -560,7 +631,7 @@ export default function Workspace() {
                 </div>
                 {
                   <IconButton
-                    label={"Bu dosyanın kodunu kopyala"}
+                    label={translate("Bu dosyanın kodunu kopyala")}
                     onClick={copy}
                     icon={<Copy size={14} />}
                   />
@@ -574,7 +645,9 @@ export default function Workspace() {
               >
                 <Suspense
                   fallback={
-                    <div className="editor-loading">Editör hazırlanıyor…</div>
+                    <div className="editor-loading">
+                      {translate("Editör hazırlanıyor…")}
+                    </div>
                   }
                 >
                   {ready &&
@@ -583,6 +656,7 @@ export default function Workspace() {
                         <Editor
                           value={project[language]}
                           language={language}
+                          locale={locale}
                           onChange={(value) => {
                             setSaved("Kaydediliyor…");
                             setProject((p) => ({ ...p, [language]: value }));
@@ -597,8 +671,9 @@ export default function Workspace() {
               </div>
               <div className="editor-bottom">
                 <span>
-                  {project[tab].split("\n").length} satır <i>·</i>{" "}
-                  {project[tab].length.toLocaleString("tr-TR")} karakter
+                  {formatCount(locale, "line", project[tab].split("\n").length)}{" "}
+                  <i>·</i>{" "}
+                  {formatCount(locale, "character", project[tab].length)}
                 </span>
                 <span>
                   UTF-8 <i>·</i> {tab.toUpperCase()}
@@ -607,17 +682,17 @@ export default function Workspace() {
             </section>
             <section
               className="preview-panel"
-              aria-label="Canlı önizleme"
+              aria-label={translate("Canlı önizleme")}
               ref={preview}
             >
               <div className="panel-toolbar preview-toolbar">
                 <div className="preview-label">
-                  <span className="status-dot" /> <b>Önizleme</b>
+                  <span className="status-dot" /> <b>{translate("Önizleme")}</b>
                 </div>
                 <div className="device-switch">
                   {
                     <IconButton
-                      label={"Esnek masaüstü görünümü"}
+                      label={translate("Esnek masaüstü görünümü")}
                       onClick={() => setViewport("100%")}
                       icon={<Monitor size={15} />}
                       active={viewport === "100%"}
@@ -625,7 +700,7 @@ export default function Workspace() {
                   }
                   {
                     <IconButton
-                      label={"Tablet: 768 piksel"}
+                      label={translate("Tablet: 768 piksel")}
                       onClick={() => setViewport("768")}
                       icon={<Tablet size={15} />}
                       active={viewport === "768"}
@@ -633,7 +708,7 @@ export default function Workspace() {
                   }
                   {
                     <IconButton
-                      label={"Telefon: 375 piksel"}
+                      label={translate("Telefon: 375 piksel")}
                       onClick={() => setViewport("375")}
                       icon={<Smartphone size={15} />}
                       active={viewport === "375"}
@@ -643,14 +718,14 @@ export default function Workspace() {
                 <div className="preview-tools">
                   {
                     <IconButton
-                      label={"Önizlemeyi yenile"}
+                      label={translate("Önizlemeyi yenile")}
                       onClick={run}
                       icon={<RotateCw size={14} />}
                     />
                   }
                   {
                     <IconButton
-                      label={"Önizlemeyi tam ekran aç"}
+                      label={translate("Önizlemeyi tam ekran aç")}
                       onClick={() => {
                         if (preview.current?.requestFullscreen)
                           preview.current
@@ -680,7 +755,7 @@ export default function Workspace() {
                   <iframe
                     key={`${rendered.key}-${scripts}`}
                     ref={frame}
-                    title="HTML canlı önizleme"
+                    title={translate("HTML canlı önizleme")}
                     sandbox={scripts ? "allow-scripts" : ""}
                     referrerPolicy="no-referrer"
                     srcDoc={rendered.html}
@@ -689,11 +764,17 @@ export default function Workspace() {
               </div>
               <div className="preview-bottom">
                 <span>
-                  <ShieldCheck size={12} /> Ayrı önizleme alanı
+                  <ShieldCheck size={12} />{" "}
+                  {translate("Ayrı önizleme alanı")}{" "}
                 </span>
                 <span>
-                  {viewport === "100%" ? "Esnek genişlik" : `${viewport} px`}{" "}
-                  <i>·</i> {scripts ? "JavaScript açık" : "JavaScript kapalı"}
+                  {viewport === "100%"
+                    ? translate("Esnek genişlik")
+                    : `${viewport} px`}{" "}
+                  <i>·</i>{" "}
+                  {scripts
+                    ? translate("JavaScript açık")
+                    : translate("JavaScript kapalı")}
                 </span>
               </div>
             </section>
@@ -704,7 +785,7 @@ export default function Workspace() {
               onClick={() => setConsoleOpen((v) => !v)}
               aria-expanded={consoleOpen}
             >
-              <Terminal size={15} /> Konsol{" "}
+              <Terminal size={15} /> {translate("Konsol")}{" "}
               <span
                 className={
                   logs.some((l) => l.level === "error")
@@ -723,23 +804,29 @@ export default function Workspace() {
                   checked={auto}
                   onChange={(e) => setAuto(e.target.checked)}
                 />
-                <span className="toggle" /> Otomatik çalıştır
+                <span className="toggle" />{" "}
+                {translate("Otomatik çalıştır")}{" "}
               </label>
               <button className="primary run" onClick={run}>
-                <Play size={13} fill="currentColor" /> Çalıştır{" "}
+                <Play size={13} fill="currentColor" /> {translate("Çalıştır")}{" "}
                 <kbd>Ctrl ↵</kbd>
               </button>
             </div>
           </div>
           {consoleOpen && (
-            <section className="console-panel" aria-label="JavaScript konsolu">
+            <section
+              className="console-panel"
+              aria-label={translate("JavaScript konsolu")}
+            >
               <div className="console-heading">
                 <span>
-                  Çıktı ve hatalar <small>Son 200 kayıt</small>
+                  {" "}
+                  {translate("Çıktı ve hatalar")}{" "}
+                  <small>{translate("Son 200 kayıt")}</small>
                 </span>
                 {
                   <IconButton
-                    label={"Konsolu temizle"}
+                    label={translate("Konsolu temizle")}
                     onClick={() => setLogs([])}
                     icon={<Trash2 size={14} />}
                   />
@@ -749,14 +836,21 @@ export default function Workspace() {
                 {logs.length ? (
                   logs.map((log, i) => (
                     <div className={`console-line ${log.level}`} key={i}>
-                      <time>{log.time}</time>
+                      <time>
+                        {new Date(log.time).toLocaleTimeString(
+                          locale === "tr" ? "tr-TR" : "en-US",
+                        )}
+                      </time>
                       <b>{log.level}</b>
                       <pre>{log.text}</pre>
                     </div>
                   ))
                 ) : (
                   <p>
-                    Henüz bir çıktı yok. JavaScript’te console.log() ile başla.
+                    {" "}
+                    {translate(
+                      "Henüz bir çıktı yok. JavaScript’te console.log() ile başla.",
+                    )}{" "}
                   </p>
                 )}
               </div>
@@ -765,12 +859,15 @@ export default function Workspace() {
         </section>
         <footer className="footer">
           <span>
-            <span className="status-dot" /> Çalışman bu tarayıcıda saklanır.
+            <span className="status-dot" />{" "}
+            {translate("Çalışman bu tarayıcıda saklanır.")}{" "}
           </span>
           <span>
-            <kbd>Ctrl S</kbd> HTML indir <i>·</i> <kbd>Ctrl F</kbd> Editörde ara{" "}
+            <kbd>Ctrl S</kbd> {translate("HTML indir")} <i>·</i>{" "}
+            <kbd>Ctrl F</kbd> {translate("Editörde ara")}{" "}
             <button onClick={() => help.current?.showModal()}>
-              Tüm kısayollar ↗
+              {" "}
+              {translate("Tüm kısayollar ↗")}{" "}
             </button>
           </span>
         </footer>
@@ -785,24 +882,29 @@ export default function Workspace() {
           e.target.value = "";
         }}
       />
-      <dialog ref={settings} className="dialog">
+      <dialog
+        ref={settings}
+        className="dialog"
+        aria-label={translate("Çalışma alanı ayarları")}
+      >
         <div className="dialog-title">
           <div>
-            <span className="eyebrow">SANA GÖRE BİR ALAN</span>
-            <h2>Çalışma alanı ayarları</h2>
+            <span className="eyebrow">{translate("SANA GÖRE BİR ALAN")}</span>
+            <h2>{translate("Çalışma alanı ayarları")}</h2>
           </div>
           <button
             className="icon-button"
             onClick={() => settings.current?.close()}
-            aria-label="Ayarları kapat"
+            aria-label={translate("Ayarları kapat")}
           >
             <X size={20} />
           </button>
         </div>
         <p className="dialog-subtitle">
-          Rengini, ritmini, çalışma şeklini seç.
+          {" "}
+          {translate("Rengini, ritmini, çalışma şeklini seç.")}{" "}
         </p>
-        <h3>Görünüm</h3>
+        <h3>{translate("Görünüm")}</h3>
         <div className="theme-options">
           {(
             [
@@ -822,14 +924,16 @@ export default function Workspace() {
                 <span />
                 <span />
               </span>
-              <b>{t.name}</b>
+              <b>{translate(t.name)}</b>
               {theme === t.id && <Check size={14} />}
             </button>
           ))}
         </div>
         <div className="setting-row">
           <label htmlFor="font-size">
-            Editör yazı boyutu<small>Rahat okuma için ayarla.</small>
+            {" "}
+            {translate("Editör yazı boyutu")}
+            <small>{translate("Rahat okuma için ayarla.")}</small>
           </label>
           <select
             id="font-size"
@@ -845,7 +949,9 @@ export default function Workspace() {
         </div>
         <div className="setting-row">
           <label htmlFor="wrap">
-            Uzun satırları kaydır<small>Yatay kaydırmadan kodunu gör.</small>
+            {" "}
+            {translate("Uzun satırları kaydır")}
+            <small>{translate("Yatay kaydırmadan kodunu gör.")}</small>
           </label>
           <input
             id="wrap"
@@ -856,8 +962,9 @@ export default function Workspace() {
         </div>
         <div className="setting-row">
           <label htmlFor="scripts">
-            JavaScript’i çalıştır
-            <small>Önizlemedeki betikleri etkinleştir.</small>
+            {" "}
+            {translate("JavaScript’i çalıştır")}{" "}
+            <small>{translate("Önizlemedeki betikleri etkinleştir.")}</small>
           </label>
           <input
             id="scripts"
@@ -869,34 +976,41 @@ export default function Workspace() {
         <div className="settings-note">
           <ShieldCheck size={18} />
           <p>
-            Projeler bu cihazın tarayıcısında saklanır. Açtığın HTML’in dış
-            bağlantıları ağ isteği yapabilir. Kalıcı bir kopya için projeni
-            indir.
+            {" "}
+            {translate(
+              "Projeler bu cihazın tarayıcısında saklanır. Açtığın HTML’in dış bağlantıları ağ isteği yapabilir. Kalıcı bir kopya için projeni indir.",
+            )}{" "}
           </p>
         </div>
         <button
           className="primary full"
           onClick={() => settings.current?.close()}
         >
-          Tamam, devam edelim <Check size={15} />
+          {" "}
+          {translate("Tamam, devam edelim")} <Check size={15} />
         </button>
       </dialog>
-      <dialog ref={library} className="dialog template-dialog">
+      <dialog
+        ref={library}
+        className="dialog template-dialog"
+        aria-label={translate("Bir fikirle başla")}
+      >
         <div className="dialog-title">
           <div>
-            <span className="eyebrow">KÜÇÜK BİR BAŞLANGIÇ</span>
-            <h2>Sıradaki fikrin burada.</h2>
+            <span className="eyebrow">{translate("KÜÇÜK BİR BAŞLANGIÇ")}</span>
+            <h2>{translate("Sıradaki fikrin burada.")}</h2>
           </div>
           <button
             className="icon-button"
             onClick={() => library.current?.close()}
-            aria-label="Şablonları kapat"
+            aria-label={translate("Şablonları kapat")}
           >
             <X size={20} />
           </button>
         </div>
         <p className="dialog-subtitle">
-          Bir tuval seç, gerisini hayal gücüne bırak.
+          {" "}
+          {translate("Bir tuval seç, gerisini hayal gücüne bırak.")}{" "}
         </p>
         <div className="template-grid">
           {templates.map((t, i) => (
@@ -908,54 +1022,62 @@ export default function Workspace() {
               <div className={`template-art ${t.color}`}>
                 {i === 0 ? (
                   <>
-                    <small>A LITTLE IDEA.</small>
+                    <small>{translate("A LITTLE IDEA.")}</small>
                     <strong>
-                      Make
-                      <br />
-                      <em>something.</em>
+                      {" "}
+                      {translate("Make")} <br />
+                      <em>{translate("something.")}</em>
                     </strong>
                   </>
                 ) : i === 1 ? (
                   <>
                     <span className="orb" />
-                    <strong>Stay curious.</strong>
+                    <strong>{translate("Stay curious.")}</strong>
                   </>
                 ) : (
                   <Plus size={40} />
                 )}
               </div>
               <b>
-                {t.name}
+                {translate(t.name)}
                 <span>↗</span>
               </b>
-              <small>{t.caption}</small>
+              <small>{translate(t.caption)}</small>
             </button>
           ))}
         </div>
         <p className="muted">
-          Şablon açmak mevcut çalışmanın yerini alır. Önce “Proje kaydet” ile
-          kopyasını indirebilirsin.
+          {" "}
+          {translate(
+            "Şablon açmak mevcut çalışmanın yerini alır. Önce “Proje kaydet” ile kopyasını indirebilirsin.",
+          )}{" "}
         </p>
       </dialog>
-      <dialog ref={help} className="dialog">
+      <dialog
+        ref={help}
+        className="dialog"
+        aria-label={translate("Klavye kısayolları")}
+      >
         <div className="dialog-title">
-          <h2>Akışını bozmadan.</h2>
+          <h2>{translate("Akışını bozmadan.")}</h2>
           <button
             className="icon-button"
             onClick={() => help.current?.close()}
-            aria-label="Kısayolları kapat"
+            aria-label={translate("Kısayolları kapat")}
           >
             <X size={20} />
           </button>
         </div>
-        <p className="dialog-subtitle">Mac’te Ctrl yerine ⌘ kullanabilirsin.</p>
+        <p className="dialog-subtitle">
+          {translate("Mac’te Ctrl yerine ⌘ kullanabilirsin.")}
+        </p>
         {[
-          ["Ctrl + Enter", "Önizlemeyi çalıştır"],
-          ["Ctrl + S", "HTML dosyasını indir"],
-          ["Ctrl + F", "Editörde ara ve değiştir"],
-          ["Ctrl + Z", "Son düzenlemeyi geri al"],
-          ["Tab", "Kodu girintile"],
-          ["Esc", "Açık pencereyi kapat"],
+          ["Ctrl + Enter", translate("Önizlemeyi çalıştır")],
+          ["Ctrl + S", translate("HTML dosyasını indir")],
+          ["Ctrl + F", translate("Editörde ara ve değiştir")],
+          ["Ctrl + Z", translate("Son düzenlemeyi geri al")],
+          ["Tab", translate("Kodu girintile")],
+          ["Esc", translate("Açık pencereyi kapat")],
         ].map(([key, label]) => (
           <div className="shortcut-row" key={key}>
             <span>{label}</span>
@@ -965,17 +1087,21 @@ export default function Workspace() {
         <div className="settings-note">
           <FolderOpen size={18} />
           <p>
-            .html veya proje .json dosyanı çalışma alanına sürükleyebilirsin.
-            Dosya sınırı 2 MB; yerel resimler ve ayrı dosyalar otomatik
-            yüklenmez.
+            {" "}
+            {translate(
+              ".html veya proje .json dosyanı çalışma alanına sürükleyebilirsin. Dosya sınırı 2 MB; yerel resimler ve ayrı dosyalar otomatik yüklenmez.",
+            )}{" "}
           </p>
         </div>
       </dialog>
       {notice && (
         <div className="toast" role="status">
           <Check size={16} />
-          {notice}
-          <button aria-label="Bildirimi kapat" onClick={() => setNotice("")}>
+          {translate(notice)}
+          <button
+            aria-label={translate("Bildirimi kapat")}
+            onClick={() => setNotice("")}
+          >
             <X size={14} />
           </button>
         </div>

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — 2026-09-28
+
+- Complete Turkish/English interface switching with a persisted language preference.
+- Translated dialogs, notifications, accessibility labels, template descriptions and CodeMirror search controls.
+- Switching language preserves source code, preview state and editor undo history.
+- Locale-aware counts and console timestamps; narrow-screen header and light-theme contrast fixes.
+- Translation coverage and editor phrase regression tests.
+
 ## 1.1.0 — 2026-09-28
 
 - Public online use without installation or an account.

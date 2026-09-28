@@ -14,7 +14,7 @@
 
 </div>
 
-HTML, CSS ve JavaScript yazmak, mevcut HTML dosyalarını açmak ve sonucu anında görmek için tarayıcıda çalışan bir çalışma alanı. Varsayılan koyu tema, üç görünüm seçeneği ve gelişmiş kod editörüyle gelir. Dosyalar uygulama tarafından sunucuya gönderilmez.
+HTML, CSS ve JavaScript yazmak, mevcut HTML dosyalarını açmak ve sonucu anında görmek için tarayıcıda çalışan bir çalışma alanı. Varsayılan koyu tema, üç görünüm seçeneği ve gelişmiş kod editörüyle gelir. Üst çubuktan **TR/EN** arasında geçebilirsin; seçimin hatırlanır, yazdığın kod değişmez. Dosyalar uygulama tarafından sunucuya gönderilmez.
 
 ## 10 saniyede başla
 

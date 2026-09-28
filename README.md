@@ -14,7 +14,7 @@
 
 </div>
 
-A browser workspace for HTML, CSS and JavaScript, with a dark default theme, a full code editor and instant preview. Open an existing HTML file or start from a template. Your code stays in your browser; the app does not upload it. The current interface is Turkish.
+A browser workspace for HTML, CSS and JavaScript, with a dark default theme, a full code editor and instant preview. Open an existing HTML file or start from a template. Your code stays in your browser; the app does not upload it. Switch between **English and Turkish** using the header language selector; your preference is remembered without changing your code.
 
 ## Start in 10 seconds
 
