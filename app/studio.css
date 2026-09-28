@@ -166,6 +166,39 @@ p {
   align-items: center;
   gap: 9px;
 }
+.language-switch {
+  display: flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  margin-right: 6px;
+}
+.language-switch button {
+  min-width: 29px;
+  min-height: 28px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.language-switch button[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+.theme-light .primary {
+  color: #fff;
+}
+.theme-light .file-symbol.html {
+  color: #a34d26;
+}
+.theme-light .file-symbol.css {
+  color: #3866a9;
+}
+.theme-light .file-symbol.js {
+  color: #866700;
+}
 .icon-button {
   display: inline-flex;
   align-items: center;
@@ -1302,5 +1335,31 @@ h1 > span {
   *::after {
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+@media (max-width: 600px) {
+  .topbar {
+    gap: 8px;
+  }
+  .top-actions > button.icon-button:first-of-type {
+    display: none;
+  }
+  .top-actions .primary.small span {
+    display: none;
+  }
+  .top-actions .primary.small {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    margin-left: 0;
+  }
+  .language-switch {
+    margin-right: 2px;
+  }
+  .brand {
+    gap: 7px;
+  }
+  .file-tabs button {
+    padding: 0 9px;
   }
 }

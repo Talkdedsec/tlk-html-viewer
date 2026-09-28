@@ -6,6 +6,8 @@ import { javascript } from "@codemirror/lang-javascript";
 import { EditorView } from "@codemirror/view";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { useMemo } from "react";
+import { EditorState } from "@codemirror/state";
+import { editorPhrases, translate, type Locale } from "../lib/i18n";
 
 export default function Editor({
   value,
@@ -14,6 +16,7 @@ export default function Editor({
   light,
   fontSize,
   wrap,
+  locale,
 }: {
   value: string;
   language: "html" | "css" | "js";
@@ -21,9 +24,11 @@ export default function Editor({
   light: boolean;
   fontSize: number;
   wrap: boolean;
+  locale: Locale;
 }) {
   const extensions = useMemo(
     () => [
+      EditorState.phrases.of(locale === "tr" ? editorPhrases : {}),
       language === "html" ? html() : language === "css" ? css() : javascript(),
       ...(wrap ? [EditorView.lineWrapping] : []),
       EditorView.theme({
@@ -46,7 +51,7 @@ export default function Editor({
         ".cm-activeLine": { background: "rgba(128,128,180,.05)" },
       }),
     ],
-    [language, fontSize, wrap],
+    [language, fontSize, wrap, locale],
   );
   return (
     <CodeMirror
@@ -55,7 +60,7 @@ export default function Editor({
       theme={light ? "light" : oneDark}
       onChange={onChange}
       height="100%"
-      aria-label={`${language.toUpperCase()} kod editörü`}
+      aria-label={`${language.toUpperCase()} ${translate(locale, "Kod editörü")}`}
       basicSetup={{
         foldGutter: true,
         autocompletion: true,
