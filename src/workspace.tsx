@@ -5,7 +5,7 @@ import {
   formatCount,
   type Locale,
   type MessageKey,
-} from "../lib/i18n";
+} from "./lib/i18n";
 import {
   lazy,
   Suspense,
@@ -51,7 +51,7 @@ import {
   starter,
   MAX_FILE_SIZE,
   type Project,
-} from "../lib/document";
+} from "./lib/document";
 const Editor = lazy(() => import("./editor"));
 type Layout = "split" | "stack" | "code" | "preview";
 type Theme = "midnight" | "graphite" | "light";
