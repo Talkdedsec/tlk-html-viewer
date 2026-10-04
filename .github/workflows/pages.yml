@@ -31,7 +31,7 @@ jobs:
           cp release/SHA256SUMS.txt pages/
           cp public/og.png pages/
           touch pages/.nojekyll
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: pages
   deploy:
