@@ -1,6 +1,6 @@
 # Architecture
 
-The online, offline and Sites builds share one React workspace. There is no backend API for users' documents.
+The online and offline versions are the same single HTML file built from one React workspace. There is no backend API for users' documents.
 
 ```mermaid
 flowchart LR
@@ -15,23 +15,21 @@ flowchart LR
 
 ## Source map
 
-| Location                         | Responsibility                                                       |
-| -------------------------------- | -------------------------------------------------------------------- |
-| `app/workspace.tsx`              | Application state, responsive workspace and user actions             |
-| `app/editor.tsx`                 | CodeMirror configuration and language support                        |
-| `app/studio.css`                 | Three themes, layouts, responsive and accessibility styles           |
-| `lib/document.ts`                | Pure HTML composition and project validation                         |
-| `standalone/main.tsx`            | Browser-only entry point shared by Pages and offline builds          |
-| `scripts/build-standalone.mjs`   | Bundle all application code into one HTML, emit checksum             |
-| `app/page.tsx`, `app/layout.tsx` | Optional server-rendered Sites entry and metadata                    |
-| `build/sites-vite-plugin.ts`     | Preserve Sites deployment metadata in the Worker output              |
-| `tests/`                         | Composition, import validation, artifact and production Worker tests |
+| Location                       | Responsibility                                                  |
+| ------------------------------ | --------------------------------------------------------------- |
+| `src/workspace.tsx`            | Application state, responsive workspace and user actions        |
+| `src/editor.tsx`               | CodeMirror configuration and language support                   |
+| `src/studio.css`               | Three themes, layouts, responsive and accessibility styles      |
+| `src/lib/document.ts`          | Pure HTML composition and project validation                    |
+| `src/lib/i18n.ts`              | Turkish and English interface text                              |
+| `src/main.tsx`                 | Browser entry point                                             |
+| `scripts/build-standalone.mjs` | Bundle all application code into one HTML, emit checksum        |
+| `index.html`, `vite.config.ts` | Local development server only                                   |
+| `tests/`                       | Composition, import validation, translation and artifact checks |
 
 ## Distribution
 
 The GitHub Pages workflow builds the standalone artifact and serves it as `index.html`. The downloadable HTML is the same file. It does not need a CDN, npm, a backend or an account to run. The build checks that no external runtime imports remain and verifies its SHA-256 checksum. Library license notices are retained in the bundle.
-
-Sites uses the existing vinext/Vite/Cloudflare pipeline. A Sites deployment and a GitHub Pages deployment are separate services; changing one does not change the other's audience.
 
 ## Data boundaries
 
@@ -43,4 +41,4 @@ The HTML composer is designed for browser documents and fragments, not as a sani
 
 ## Validation boundaries
 
-CI verifies types, lint, pure functions, the standalone output and server rendering. It does not claim a full cross-browser accessibility audit. Before shipping UI changes, manually check desktop/mobile layouts, all themes, keyboard navigation, dialogs, storage denial and file import/export.
+CI verifies types, lint, pure functions, the standalone output and the preview sandbox. It does not claim a full cross-browser accessibility audit. Before shipping UI changes, manually check desktop/mobile layouts, all themes, keyboard navigation, dialogs, storage denial and file import/export.
