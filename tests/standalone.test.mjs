@@ -34,3 +34,19 @@ test("standalone dependency graph has no external runtime imports", async () => 
     assert.equal(output.imports.filter((i) => i.external).length, 0);
   }
 });
+
+test("preview stays sandboxed and the page ships its metadata", async () => {
+  const html = await readFile("release/tlk-html-viewer.html", "utf8");
+  // The preview iframe gets allow-scripts at most. The bundle also contains
+  // CodeMirror's completion list for the sandbox attribute, so the check is
+  // pinned to the iframe's own props rather than the whole file.
+  assert.match(
+    html,
+    /sandbox:\w+\?"allow-scripts":"",referrerPolicy:"no-referrer"/,
+  );
+  for (const file of ["src/workspace.tsx", "src/editor.tsx", "src/lib/document.ts"])
+    assert.doesNotMatch(await readFile(file, "utf8"), /allow-same-origin/);
+  assert.match(html, /role:"tablist"/);
+  assert.match(html, /<meta property="og:image" content="https:\/\//);
+  assert.match(html, /Fikirden/);
+});

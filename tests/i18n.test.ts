@@ -9,7 +9,7 @@ import {
   formatCount,
   editorPhrases,
   type MessageKey,
-} from "../lib/i18n.ts";
+} from "../src/lib/i18n.ts";
 
 test("every message has nonempty Turkish and English text with no encoding damage", () => {
   assert.ok(Object.keys(messages).length > 100);
@@ -35,7 +35,7 @@ test("locale restore is validated and counts use correct grammar", () => {
 test("visible JSX text and accessibility labels use the translation catalog", async () => {
   const source = ts.createSourceFile(
     "workspace.tsx",
-    await readFile("app/workspace.tsx", "utf8"),
+    await readFile("src/workspace.tsx", "utf8"),
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TSX,

@@ -2,10 +2,11 @@ import { build } from "esbuild";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
-// A second distribution of the SAME workspace, not a separate implementation.
-// No chunks, CDN URLs, server or package installation are needed at runtime.
+// The whole workspace in one HTML file: GitHub Pages serves it as index.html
+// and the release ships it unchanged. No chunks, CDN URLs, server or package
+// installation are needed at runtime.
 const result = await build({
-  entryPoints: ["standalone/main.tsx"],
+  entryPoints: ["src/main.tsx"],
   bundle: true,
   splitting: false,
   minify: true,

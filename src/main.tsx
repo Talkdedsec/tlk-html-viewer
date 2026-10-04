@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import Workspace from "../app/workspace";
-import "../app/studio.css";
+import Workspace from "./workspace";
+import "./studio.css";
 
 createRoot(document.getElementById("root")!).render(<Workspace />);

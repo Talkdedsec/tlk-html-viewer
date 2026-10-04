@@ -84,14 +84,12 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run test:production
-npm run build:standalone
-npm run test:standalone
+npm run test:build
 ```
 
-The web and offline distributions share `app/workspace.tsx`. CodeMirror 6 provides the editor; React and TypeScript power the interface. The standalone build uses esbuild. The optional Sites build preserves the vinext/Vite/Cloudflare pipeline.
+`npm run build` bundles the whole workspace into one file, `release/tlk-html-viewer.html`, with esbuild. GitHub Pages serves that file and the release ships it unchanged. CodeMirror 6 provides the editor; React and TypeScript power the interface.
 
-CI verifies document composition, project validation, standalone integrity and production server rendering. It is not a claim of complete cross-browser or accessibility testing.
+CI verifies document composition, project validation, standalone integrity and the preview sandbox. It is not a claim of complete cross-browser or accessibility testing.
 
 ## Contribute
 

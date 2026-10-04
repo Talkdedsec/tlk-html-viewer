@@ -7,7 +7,7 @@ import { EditorView } from "@codemirror/view";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { useMemo } from "react";
 import { EditorState } from "@codemirror/state";
-import { editorPhrases, translate, type Locale } from "../lib/i18n";
+import { editorPhrases, translate, type Locale } from "./lib/i18n";
 
 export default function Editor({
   value,

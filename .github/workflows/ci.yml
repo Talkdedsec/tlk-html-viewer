@@ -19,9 +19,7 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
-      - run: npm run test:production
-      - run: npm run build:standalone
-      - run: npm run test:standalone
+      - run: npm run test:build
       - uses: actions/upload-artifact@v7
         with:
           name: tlk-html-viewer-standalone

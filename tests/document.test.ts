@@ -6,7 +6,7 @@ import {
   parseProject,
   starter,
   MAX_FILE_SIZE,
-} from "../lib/document.ts";
+} from "../src/lib/document.ts";
 
 test("exports a self-contained document from all three panels", () => {
   const output = composeDocument(starter);

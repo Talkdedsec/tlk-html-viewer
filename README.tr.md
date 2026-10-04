@@ -65,12 +65,12 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run test:production
-npm run build:standalone
-npm run test:standalone
+npm run test:build
 ```
 
-Testler belge üretimini, içe aktarma doğrulamasını, tek dosyalık dağıtımı ve üretim sunucu çıktısını denetler. Bu kontroller kapsamlı tarayıcı/erişilebilirlik denetimi anlamına gelmez.
+`npm run build`, tüm çalışma alanını esbuild ile tek bir dosyaya, `release/tlk-html-viewer.html` dosyasına paketler. GitHub Pages bu dosyayı yayınlar, sürüm de aynı dosyayı dağıtır.
+
+Testler belge üretimini, içe aktarma doğrulamasını, tek dosyalık dağıtımı ve önizleme sandbox'ını denetler. Bu kontroller kapsamlı tarayıcı/erişilebilirlik denetimi anlamına gelmez.
 
 ## Katkı
 
