@@ -4,7 +4,20 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # typescript-eslint supports TypeScript < 6.1, and TypeScript 7 no longer
+      # exposes the compiler API that tests/i18n.test.ts parses JSX with.
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
+    commit-message:
+      prefix: deps
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    commit-message:
+      prefix: ci
