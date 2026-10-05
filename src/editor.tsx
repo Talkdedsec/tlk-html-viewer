@@ -1,4 +1,3 @@
-"use client";
 import CodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
@@ -60,7 +59,7 @@ export default function Editor({
       theme={light ? "light" : oneDark}
       onChange={onChange}
       height="100%"
-      aria-label={`${language.toUpperCase()} ${translate(locale, "Kod editörü")}`}
+      aria-label={`${language.toUpperCase()} ${translate(locale, "Code editor")}`}
       basicSetup={{
         foldGutter: true,
         autocompletion: true,
