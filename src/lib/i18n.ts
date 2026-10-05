@@ -1,153 +1,147 @@
-export type Locale = "tr" | "en";
+export type Locale = "en" | "tr";
 
-// Turkish source messages are stable message IDs, as in gettext catalogs.
-// Keeping a single catalog makes an untranslated English entry a type error.
+// English source text is the message ID, as in gettext catalogs, and each
+// entry holds its Turkish translation. A missing translation is a type error.
 export const messages = {
-  "İlk fikrin": "Your first idea",
-  "Minimal bir başlangıç": "A minimal starting point",
-  "Gece kartı": "Night card",
-  "Biraz renk, biraz hareket": "A little color, a little motion",
-  "Boş tuval": "Blank canvas",
-  "Tamamen sana ait": "Entirely yours",
-  Hazırlanıyor: "Getting ready",
-  "Yerel kayıt okunamadı. Editörü kullanmaya devam edebilirsin.":
-    "Local data could not be read. You can keep using the editor.",
-  "Bu tarayıcıya kaydedildi": "Saved in this browser",
-  "Yerel kayıt kullanılamıyor": "Local saving unavailable",
-  "Kaydediliyor…": "Saving…",
-  "HTML dosyası indirildi.": "HTML file downloaded.",
-  "Dosya sınırı 2 MB. Daha küçük bir dosya seç.":
-    "The file limit is 2 MB. Choose a smaller file.",
-  "Bir .html, .htm veya proje .json dosyası seç.":
-    "Choose an .html, .htm or project .json file.",
-  "Açılan dosya mevcut çalışmanın yerini alacak. Devam edilsin mi?":
-    "Opening this file will replace your current work. Continue?",
-  "Geçersiz proje dosyası.": "Invalid project file.",
-  "Dosya açıldı.": "File opened.",
-  "Dosya açılamadı. Proje biçimini kontrol et.":
-    "Could not open the file. Check its project format.",
-  "Şablon mevcut çalışmanın yerini alacak. Devam edilsin mi?":
-    "This template will replace your current work. Continue?",
-  "Yeni tuval hazır.": "Your new canvas is ready.",
-  "Kod kopyalandı.": "Code copied.",
-  "Panoya erişilemedi. Editörde kodu seçip kopyalayabilirsin.":
-    "Clipboard unavailable. Select and copy the code in the editor.",
-  "Editöre geç": "Skip to editor",
-  "TLK HTML Viewer, başa dön": "TLK HTML Viewer, back to top",
-  "Kendi alanın. Sonsuz olasılık.": "Your space. Endless possibilities.",
-  "GitHub deposu": "GitHub repository",
-  "Klavye kısayolları": "Keyboard shortcuts",
-  "Çalışma alanı ayarları": "Workspace settings",
-  "HTML indir": "Download HTML",
-  "TARAYICIDAKİ YARATICI ALANIN": "YOUR CREATIVE SPACE IN THE BROWSER",
-  Fikirden: "From idea to",
-  "ekrana.": "canvas.",
-  "Yaz, dene, keşfet. Kodun anında hayat bulsun.":
-    "Write, experiment, explore. See your code come to life.",
-  "Bir fikirle başla": "Start with an idea",
-  "Hazır tuvalleri keşfet": "Explore starter canvases",
-  "HTML çalışma alanı": "HTML workspace",
-  "Proje adı": "Project name",
-  "Dosya aç": "Open file",
-  "Düzenlenebilir proje indirildi.": "Editable project downloaded.",
-  "Proje kaydet": "Save project",
-  "Panel düzeni": "Panel layout",
-  "Yan yana": "Side by side",
-  "Alt alta": "Stacked",
-  "Yalnızca kod": "Code only",
-  "Yalnızca önizleme": "Preview only",
-  Kod: "Code",
-  Önizleme: "Preview",
-  "Kod editörü": "Code editor",
-  "Kod dili": "Code language",
-  "Bu dosyanın kodunu kopyala": "Copy this file’s code",
-  "Editör hazırlanıyor…": "Loading the editor…",
-  satır: "lines",
-  karakter: "characters",
-  "Canlı önizleme": "Live preview",
-  "Esnek masaüstü görünümü": "Flexible desktop viewport",
-  "Tablet: 768 piksel": "Tablet: 768 pixels",
-  "Telefon: 375 piksel": "Phone: 375 pixels",
-  "Önizlemeyi yenile": "Refresh preview",
-  "Önizlemeyi tam ekran aç": "Open preview in fullscreen",
-  "Tam ekran kullanılamıyor.": "Fullscreen is unavailable.",
-  "Bu tarayıcı tam ekranı desteklemiyor.":
-    "This browser does not support fullscreen.",
-  "HTML canlı önizleme": "Live HTML preview",
-  "Ayrı önizleme alanı": "Isolated preview",
-  "Esnek genişlik": "Flexible width",
-  "JavaScript açık": "JavaScript enabled",
-  "JavaScript kapalı": "JavaScript disabled",
-  Konsol: "Console",
-  "Otomatik çalıştır": "Auto-run",
-  Çalıştır: "Run",
-  "JavaScript konsolu": "JavaScript console",
-  "Çıktı ve hatalar": "Output and errors",
-  "Son 200 kayıt": "Last 200 entries",
-  "Konsolu temizle": "Clear console",
-  "Henüz bir çıktı yok. JavaScript’te console.log() ile başla.":
-    "No output yet. Try console.log() in your JavaScript.",
-  "Çalışman bu tarayıcıda saklanır.": "Your work stays in this browser.",
-  "Editörde ara": "Search editor",
-  "Tüm kısayollar ↗": "All shortcuts ↗",
-  "SANA GÖRE BİR ALAN": "A SPACE THAT FITS YOU",
-  "Ayarları kapat": "Close settings",
-  "Rengini, ritmini, çalışma şeklini seç.":
-    "Choose your colors, your rhythm, your workflow.",
-  Görünüm: "Appearance",
-  Gece: "Midnight",
-  Grafit: "Graphite",
-  "Gün ışığı": "Daylight",
-  "Editör yazı boyutu": "Editor font size",
-  "Rahat okuma için ayarla.": "Adjust for comfortable reading.",
-  "Uzun satırları kaydır": "Wrap long lines",
-  "Yatay kaydırmadan kodunu gör.":
-    "Read your code without horizontal scrolling.",
-  "JavaScript’i çalıştır": "Run JavaScript",
-  "Önizlemedeki betikleri etkinleştir.": "Enable scripts in the preview.",
-  "Projeler bu cihazın tarayıcısında saklanır. Açtığın HTML’in dış bağlantıları ağ isteği yapabilir. Kalıcı bir kopya için projeni indir.":
-    "Projects are saved in this browser. External resources in your HTML can make network requests. Download your project to keep a backup.",
-  "Tamam, devam edelim": "Done, let’s continue",
-  "KÜÇÜK BİR BAŞLANGIÇ": "A SMALL START",
-  "Sıradaki fikrin burada.": "Your next idea starts here.",
-  "Şablonları kapat": "Close templates",
-  "Bir tuval seç, gerisini hayal gücüne bırak.":
-    "Choose a canvas. Let your imagination do the rest.",
-  "Şablon açmak mevcut çalışmanın yerini alır. Önce “Proje kaydet” ile kopyasını indirebilirsin.":
-    "Opening a template replaces your current work. Download a backup with “Save project” first.",
-  "Akışını bozmadan.": "Stay in your flow.",
-  "Kısayolları kapat": "Close shortcuts",
-  "Mac’te Ctrl yerine ⌘ kullanabilirsin.": "On a Mac, use ⌘ instead of Ctrl.",
-  "Önizlemeyi çalıştır": "Run the preview",
-  "HTML dosyasını indir": "Download the HTML file",
-  "Editörde ara ve değiştir": "Find and replace in the editor",
-  "Son düzenlemeyi geri al": "Undo the last edit",
-  "Kodu girintile": "Indent code",
-  "Açık pencereyi kapat": "Close the open dialog",
-  ".html veya proje .json dosyanı çalışma alanına sürükleyebilirsin. Dosya sınırı 2 MB; yerel resimler ve ayrı dosyalar otomatik yüklenmez.":
-    "Drag an .html or project .json file into the workspace. The file limit is 2 MB; local images and companion files are not loaded automatically.",
-  "Bildirimi kapat": "Dismiss notification",
-  "Arayüz dili": "Interface language",
-  "Çevrimdışı sürümü indir": "Download the offline app",
-  "Kodun sunucuya yüklenmez.": "Your code is not uploaded.",
-  "A LITTLE IDEA.": "A LITTLE IDEA.",
-  Make: "Make",
-  "something.": "something.",
-  "Stay curious.": "Stay curious.",
-} as const;
-
-export type MessageKey = keyof typeof messages;
-
-// Template illustrations are translated; user source code is never translated.
-const turkishOverrides: Partial<Record<MessageKey, string>> = {
+  "Your first idea": "İlk fikrin",
+  "A minimal starting point": "Minimal bir başlangıç",
+  "Night card": "Gece kartı",
+  "A little color, a little motion": "Biraz renk, biraz hareket",
+  "Blank canvas": "Boş tuval",
+  "Entirely yours": "Tamamen sana ait",
+  "Getting ready": "Hazırlanıyor",
+  "Local data could not be read. You can keep using the editor.":
+    "Yerel kayıt okunamadı. Editörü kullanmaya devam edebilirsin.",
+  "Saved in this browser": "Bu tarayıcıya kaydedildi",
+  "Local saving unavailable": "Yerel kayıt kullanılamıyor",
+  "Saving…": "Kaydediliyor…",
+  "HTML file downloaded.": "HTML dosyası indirildi.",
+  "The file limit is 2 MB. Choose a smaller file.":
+    "Dosya sınırı 2 MB. Daha küçük bir dosya seç.",
+  "Choose an .html, .htm or project .json file.":
+    "Bir .html, .htm veya proje .json dosyası seç.",
+  "Opening this file will replace your current work. Continue?":
+    "Açılan dosya mevcut çalışmanın yerini alacak. Devam edilsin mi?",
+  "Invalid project file.": "Geçersiz proje dosyası.",
+  "File opened.": "Dosya açıldı.",
+  "Could not open the file. Check its project format.":
+    "Dosya açılamadı. Proje biçimini kontrol et.",
+  "This template will replace your current work. Continue?":
+    "Şablon mevcut çalışmanın yerini alacak. Devam edilsin mi?",
+  "Your new canvas is ready.": "Yeni tuval hazır.",
+  "Code copied.": "Kod kopyalandı.",
+  "Clipboard unavailable. Select and copy the code in the editor.":
+    "Panoya erişilemedi. Editörde kodu seçip kopyalayabilirsin.",
+  "Skip to editor": "Editöre geç",
+  "TLK HTML Viewer, back to top": "TLK HTML Viewer, başa dön",
+  "Your space. Endless possibilities.": "Kendi alanın. Sonsuz olasılık.",
+  "GitHub repository": "GitHub deposu",
+  "Keyboard shortcuts": "Klavye kısayolları",
+  "Workspace settings": "Çalışma alanı ayarları",
+  "Download HTML": "HTML indir",
+  "YOUR CREATIVE SPACE IN THE BROWSER": "TARAYICIDAKİ YARATICI ALANIN",
+  "From idea to": "Fikirden",
+  "canvas.": "ekrana.",
+  "Write, experiment, explore. See your code come to life.":
+    "Yaz, dene, keşfet. Kodun anında hayat bulsun.",
+  "Start with an idea": "Bir fikirle başla",
+  "Explore starter canvases": "Hazır tuvalleri keşfet",
+  "HTML workspace": "HTML çalışma alanı",
+  "Project name": "Proje adı",
+  "Open file": "Dosya aç",
+  "Editable project downloaded.": "Düzenlenebilir proje indirildi.",
+  "Save project": "Proje kaydet",
+  "Panel layout": "Panel düzeni",
+  "Side by side": "Yan yana",
+  Stacked: "Alt alta",
+  "Code only": "Yalnızca kod",
+  "Preview only": "Yalnızca önizleme",
+  Code: "Kod",
+  Preview: "Önizleme",
+  "Code editor": "Kod editörü",
+  "Code language": "Kod dili",
+  "Copy this file’s code": "Bu dosyanın kodunu kopyala",
+  "Loading the editor…": "Editör hazırlanıyor…",
+  lines: "satır",
+  characters: "karakter",
+  "Live preview": "Canlı önizleme",
+  "Flexible desktop viewport": "Esnek masaüstü görünümü",
+  "Tablet: 768 pixels": "Tablet: 768 piksel",
+  "Phone: 375 pixels": "Telefon: 375 piksel",
+  "Refresh preview": "Önizlemeyi yenile",
+  "Open preview in fullscreen": "Önizlemeyi tam ekran aç",
+  "Fullscreen is unavailable.": "Tam ekran kullanılamıyor.",
+  "This browser does not support fullscreen.":
+    "Bu tarayıcı tam ekranı desteklemiyor.",
+  "Live HTML preview": "HTML canlı önizleme",
+  "Isolated preview": "Ayrı önizleme alanı",
+  "Flexible width": "Esnek genişlik",
+  "JavaScript enabled": "JavaScript açık",
+  "JavaScript disabled": "JavaScript kapalı",
+  Console: "Konsol",
+  "Auto-run": "Otomatik çalıştır",
+  Run: "Çalıştır",
+  "JavaScript console": "JavaScript konsolu",
+  "Output and errors": "Çıktı ve hatalar",
+  "Last 200 entries": "Son 200 kayıt",
+  "Clear console": "Konsolu temizle",
+  "No output yet. Try console.log() in your JavaScript.":
+    "Henüz bir çıktı yok. JavaScript’te console.log() ile başla.",
+  "Your work stays in this browser.": "Çalışman bu tarayıcıda saklanır.",
+  "Search editor": "Editörde ara",
+  "All shortcuts ↗": "Tüm kısayollar ↗",
+  "A SPACE THAT FITS YOU": "SANA GÖRE BİR ALAN",
+  "Close settings": "Ayarları kapat",
+  "Choose your colors, your rhythm, your workflow.":
+    "Rengini, ritmini, çalışma şeklini seç.",
+  Appearance: "Görünüm",
+  Midnight: "Gece",
+  Graphite: "Grafit",
+  Daylight: "Gün ışığı",
+  "Editor font size": "Editör yazı boyutu",
+  "Adjust for comfortable reading.": "Rahat okuma için ayarla.",
+  "Wrap long lines": "Uzun satırları kaydır",
+  "Read your code without horizontal scrolling.":
+    "Yatay kaydırmadan kodunu gör.",
+  "Run JavaScript": "JavaScript’i çalıştır",
+  "Enable scripts in the preview.": "Önizlemedeki betikleri etkinleştir.",
+  "Projects are saved in this browser. External resources in your HTML can make network requests. Download your project to keep a backup.":
+    "Projeler bu cihazın tarayıcısında saklanır. Açtığın HTML’in dış bağlantıları ağ isteği yapabilir. Kalıcı bir kopya için projeni indir.",
+  "Done, let’s continue": "Tamam, devam edelim",
+  "A SMALL START": "KÜÇÜK BİR BAŞLANGIÇ",
+  "Your next idea starts here.": "Sıradaki fikrin burada.",
+  "Close templates": "Şablonları kapat",
+  "Choose a canvas. Let your imagination do the rest.":
+    "Bir tuval seç, gerisini hayal gücüne bırak.",
+  "Opening a template replaces your current work. Download a backup with “Save project” first.":
+    "Şablon açmak mevcut çalışmanın yerini alır. Önce “Proje kaydet” ile kopyasını indirebilirsin.",
+  "Stay in your flow.": "Akışını bozmadan.",
+  "Close shortcuts": "Kısayolları kapat",
+  "On a Mac, use ⌘ instead of Ctrl.": "Mac’te Ctrl yerine ⌘ kullanabilirsin.",
+  "Run the preview": "Önizlemeyi çalıştır",
+  "Download the HTML file": "HTML dosyasını indir",
+  "Find and replace in the editor": "Editörde ara ve değiştir",
+  "Undo the last edit": "Son düzenlemeyi geri al",
+  "Indent code": "Kodu girintile",
+  "Close the open dialog": "Açık pencereyi kapat",
+  "Drag an .html or project .json file into the workspace. The file limit is 2 MB; local images and companion files are not loaded automatically.":
+    ".html veya proje .json dosyanı çalışma alanına sürükleyebilirsin. Dosya sınırı 2 MB; yerel resimler ve ayrı dosyalar otomatik yüklenmez.",
+  "Dismiss notification": "Bildirimi kapat",
+  "Interface language": "Arayüz dili",
+  "Download the offline app": "Çevrimdışı sürümü indir",
+  "Your code is not uploaded.": "Kodun sunucuya yüklenmez.",
+  "TLK HTML Viewer — From idea to canvas": "TLK HTML Viewer — Fikirden ekrana",
+  // Template illustrations are translated; user source code never is.
   "A LITTLE IDEA.": "KÜÇÜK BİR FİKİR.",
   Make: "Bir şey",
   "something.": "üret.",
   "Stay curious.": "Merak et.",
-};
+} as const;
+
+export type MessageKey = keyof typeof messages;
 
 export function translate(locale: Locale, key: MessageKey): string {
-  return locale === "en" ? messages[key] : (turkishOverrides[key] ?? key);
+  return locale === "tr" ? messages[key] : key;
 }
 
 export function normalizeLocale(value: unknown): Locale {
