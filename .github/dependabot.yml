@@ -6,6 +6,9 @@ updates:
       interval: weekly
     open-pull-requests-limit: 3
     groups:
+      # eslint and its config package move together, majors included.
+      eslint:
+        patterns: ["eslint", "@eslint/*"]
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
@@ -13,6 +16,9 @@ updates:
       # exposes the compiler API that tests/i18n.test.ts parses JSX with.
       - dependency-name: typescript
         versions: [">=6.1.0"]
+      # @types/node tracks the oldest Node release in "engines", not the newest.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: deps
   - package-ecosystem: github-actions
