@@ -1,6 +1,7 @@
 import {
   translate as translateMessage,
   normalizeLocale,
+  browserLocale,
   formatCount,
   type Locale,
   type MessageKey,
@@ -126,11 +127,17 @@ function IconButton({
   );
 }
 export default function Workspace() {
-  const [locale, setLocale] = useState<Locale>("tr");
+  const [locale, setLocale] = useState<Locale>(browserLocale);
+  // Saved only once the user picks a language; until then the browser decides.
+  const localeChosen = useRef(false);
   const translate = useCallback(
     (key: MessageKey) => translateMessage(locale, key),
     [locale],
   );
+  const chooseLocale = useCallback((next: Locale) => {
+    localeChosen.current = true;
+    setLocale(next);
+  }, []);
   const [project, setProject] = useState<Project>(starter);
   const [tab, setTab] = useState<keyof Project>("html");
   const [layout, setLayout] = useState<Layout>("split");
@@ -190,7 +197,15 @@ export default function Workspace() {
           }
         }
         const prefs = JSON.parse(localStorage.getItem(PREFS) || "{}");
-        setLocale(normalizeLocale(prefs.locale));
+        // Older versions saved the locale even when it was only the Turkish
+        // default, so from that field only "en" is a real choice.
+        const savedLocale =
+          normalizeLocale(prefs.language) ??
+          (prefs.locale === "en" ? "en" : null);
+        if (savedLocale) {
+          localeChosen.current = true;
+          setLocale(savedLocale);
+        }
         if (["midnight", "graphite", "light"].includes(prefs.theme))
           setTheme(prefs.theme);
         if ([11, 12, 13, 14, 16, 18].includes(prefs.fontSize))
@@ -223,7 +238,12 @@ export default function Workspace() {
     try {
       localStorage.setItem(
         PREFS,
-        JSON.stringify({ theme, fontSize, wrap, locale }),
+        JSON.stringify({
+          theme,
+          fontSize,
+          wrap,
+          ...(localeChosen.current ? { language: locale } : {}),
+        }),
       );
     } catch {
       /* Editing remains available. */
@@ -387,7 +407,7 @@ export default function Workspace() {
               lang="tr"
               aria-label="Türkçe"
               aria-pressed={locale === "tr"}
-              onClick={() => setLocale("tr")}
+              onClick={() => chooseLocale("tr")}
             >
               TR
             </button>
@@ -395,7 +415,7 @@ export default function Workspace() {
               lang="en"
               aria-label="English"
               aria-pressed={locale === "en"}
-              onClick={() => setLocale("en")}
+              onClick={() => chooseLocale("en")}
             >
               EN
             </button>

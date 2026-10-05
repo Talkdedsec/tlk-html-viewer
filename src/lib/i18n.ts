@@ -144,8 +144,16 @@ export function translate(locale: Locale, key: MessageKey): string {
   return locale === "tr" ? messages[key] : key;
 }
 
-export function normalizeLocale(value: unknown): Locale {
-  return value === "en" ? "en" : "tr";
+/** A supported locale, or null for anything else (unset, unknown, corrupt). */
+export function normalizeLocale(value: unknown): Locale | null {
+  return value === "en" || value === "tr" ? value : null;
+}
+
+/** Turkish for Turkish browsers, English everywhere else. */
+export function browserLocale(
+  language: string | undefined = globalThis.navigator?.language,
+): Locale {
+  return language?.toLowerCase().startsWith("tr") ? "tr" : "en";
 }
 
 export const editorPhrases: Record<string, string> = {
