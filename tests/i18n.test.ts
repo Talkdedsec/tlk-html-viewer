@@ -6,6 +6,7 @@ import {
   messages,
   translate,
   normalizeLocale,
+  browserLocale,
   formatCount,
   editorPhrases,
   type MessageKey,
@@ -30,8 +31,14 @@ test("message IDs are English source text", () => {
 test("locale restore is validated and counts use correct grammar", () => {
   assert.equal(normalizeLocale("en"), "en");
   assert.equal(normalizeLocale("tr"), "tr");
-  for (const value of [null, {}, "fr", 12])
-    assert.equal(normalizeLocale(value), "tr");
+  for (const value of [null, undefined, {}, "fr", 12])
+    assert.equal(normalizeLocale(value), null);
+  assert.equal(browserLocale("tr-TR"), "tr");
+  assert.equal(browserLocale("TR"), "tr");
+  // explicit values only: without an argument it reads navigator.language,
+  // which depends on the machine running the tests
+  for (const language of ["en-US", "de-DE", ""])
+    assert.equal(browserLocale(language), "en");
   assert.equal(formatCount("en", "line", 1), "1 line");
   assert.equal(formatCount("en", "line", 2), "2 lines");
   assert.equal(formatCount("tr", "character", 2), "2 karakter");
