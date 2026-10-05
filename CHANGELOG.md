@@ -6,6 +6,7 @@
 - Source moved to `src/`; `npm run build` produces `release/tlk-html-viewer.html`, `npm run dev` starts a local Vite server.
 - Release checks now assert the preview sandbox (`allow-scripts` only, never `allow-same-origin`) on the shipped file.
 - Linting runs on typescript-eslint and React hooks rules; Dependabot groups minor and patch updates.
+- English source text: the message catalog is keyed by English with Turkish translations, the release page and examples are English, and the usage guide has English and Turkish editions.
 
 ## 1.2.0 — 2026-09-28
 

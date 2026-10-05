@@ -22,6 +22,11 @@ test("every message has nonempty Turkish and English text with no encoding damag
   }
 });
 
+test("message IDs are English source text", () => {
+  for (const key of Object.keys(messages))
+    assert.doesNotMatch(key, /[çğıöşüÇĞİÖŞÜ]/, `Turkish message ID: ${key}`);
+});
+
 test("locale restore is validated and counts use correct grammar", () => {
   assert.equal(normalizeLocale("en"), "en");
   assert.equal(normalizeLocale("tr"), "tr");

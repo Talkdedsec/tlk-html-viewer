@@ -4,7 +4,7 @@
 
 **Fikirden ekrana. Kurulum yok. Üyelik yok.**
 
-[**Hemen kullan ↗**](https://talkdedsec.github.io/tlk-html-viewer/) · [Çevrimdışı indir](https://github.com/Talkdedsec/tlk-html-viewer/releases/latest) · [Kullanım rehberi](docs/USAGE.md) · [English](README.md)
+[**Hemen kullan ↗**](https://talkdedsec.github.io/tlk-html-viewer/) · [Çevrimdışı indir](https://github.com/Talkdedsec/tlk-html-viewer/releases/latest) · [Kullanım rehberi](docs/USAGE.tr.md) · [English](README.md)
 
 [![Quality](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/ci.yml)
 [![Website](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/pages.yml/badge.svg)](https://github.com/Talkdedsec/tlk-html-viewer/actions/workflows/pages.yml)
@@ -47,7 +47,7 @@ Sadece kullanmak için GitHub hesabı, terminal, Node.js veya paket kurulumu ger
 
 Dosya sınırı 2 MB. Yerel yan dosyalar, npm paketleri ve sunucu kodu otomatik çözülmez. Önizleme iframe’i ana uygulamadan ayrıdır; popup ve form gönderme gibi bazı işlemler kapalıdır. Sandbox sonsuz döngüleri veya HTML’in harici ağ isteklerini engellemez. Çalışmanı kalıcı korumak için JSON yedeğini indir.
 
-[Kullanım ve sorun giderme](docs/USAGE.md) · [Güvenlik modeli](SECURITY.md) · [Mimari](docs/ARCHITECTURE.md)
+[Kullanım ve sorun giderme](docs/USAGE.tr.md) · [Güvenlik modeli](SECURITY.md) · [Mimari](docs/ARCHITECTURE.md)
 
 ## Geliştirme
 

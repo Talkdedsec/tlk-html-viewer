@@ -48,5 +48,8 @@ test("preview stays sandboxed and the page ships its metadata", async () => {
     assert.doesNotMatch(await readFile(file, "utf8"), /allow-same-origin/);
   assert.match(html, /role:"tablist"/);
   assert.match(html, /<meta property="og:image" content="https:\/\//);
-  assert.match(html, /Fikirden/);
+  // English shell, Turkish catalog bundled for Turkish browsers
+  assert.match(html, /<html lang="en">/);
+  assert.match(html, /<title>TLK HTML Viewer — From idea to canvas<\/title>/);
+  assert.match(html, /Fikirden ekrana/);
 });
