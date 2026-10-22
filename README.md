@@ -96,3 +96,7 @@ CI verifies document composition, project validation, standalone integrity and t
 [Report a bug or suggest a feature](https://github.com/Talkdedsec/tlk-html-viewer/issues/new/choose). Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Releases are documented in [CHANGELOG.md](CHANGELOG.md).
 
 MIT © 2026 Talkdedsec.
+
+<p align="center">
+  <sub>Built by <a href="https://talkdedsec.com">Talkdedsec</a></sub>
+</p>

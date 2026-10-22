@@ -77,3 +77,7 @@ Testler belge üretimini, içe aktarma doğrulamasını, tek dosyalık dağıtı
 [Hata bildir veya fikir öner](https://github.com/Talkdedsec/tlk-html-viewer/issues/new/choose). Değişiklik göndermeden önce [katkı rehberini](CONTRIBUTING.md) oku. Geçmiş sürümler [CHANGELOG.md](CHANGELOG.md) dosyasında.
 
 MIT © 2026 Talkdedsec.
+
+<p align="center">
+  <sub><a href="https://talkdedsec.com">Talkdedsec</a> tarafından yapıldı</sub>
+</p>
